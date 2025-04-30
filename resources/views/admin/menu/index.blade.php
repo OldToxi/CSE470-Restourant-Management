@@ -56,13 +56,15 @@
                                     <form action="{{ route('admin.menu.toggle', $item->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('PATCH')
-                                        
+                                        <button type="submit" class="btn {{ $item->is_available ? 'btn-danger' : 'btn-success' }}" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">
+                                            {{ $item->is_available ? 'Mark Unavailable' : 'Mark Available' }}
+                                        </button>
                                     </form>
                                     
                                     <form action="{{ route('admin.menu.destroy', $item->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        
+                                        <button type="submit" class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;" onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
                                     </form>
                                 </div>
                             </td>
@@ -101,7 +103,7 @@
                             </td>
                             <td>{{ $item->name }}</td>
                             <td>{{ Str::limit($item->description, 50) }}</td>
-                            <td>৳{{ number_format($item->price, 2) }}</td>
+                            <td>${{ number_format($item->price, 2) }}</td>
                             <td>
                                 @if($item->is_available)
                                     <span class="badge badge-success">Available</span>
@@ -178,10 +180,16 @@
                                     <form action="{{ route('admin.menu.toggle', $item->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('PATCH')
-                                        
+                                        <button type="submit" class="btn {{ $item->is_available ? 'btn-danger' : 'btn-success' }}" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">
+                                            {{ $item->is_available ? 'Mark Unavailable' : 'Mark Available' }}
+                                        </button>
                                     </form>
                                     
-                                   
+                                    <form action="{{ route('admin.menu.destroy', $item->id) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;" onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -192,5 +200,32 @@
             <p>No drinks available.</p>
         @endif
     </div>
-    
+    <script>
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            searchMenuItems();
+        });
+
+        function searchMenuItems() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        
+  
+        const menuRows = document.querySelectorAll('tbody tr');
+        
+        menuRows.forEach(function(row) {
+   
+            const itemName = row.cells[1].textContent.toLowerCase();
+            
+            if (itemName.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            searchMenuItems(); 
+        }
+    </script>
 @endsection
