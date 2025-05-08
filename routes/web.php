@@ -2,9 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-Route::get('/', [HomeController::class, 'my_home']);
+use App\Http\Controllers\AdminController;
+route::get('/', [HomeController::class, 'my_home']);
 
 route::get('/home',[HomeController::class,'index']);
+
+route::get('/addfood',[AdminController::class,'addfood']);
+route::post('/uploadfood',[AdminController::class,'uploadfood']);
+route::get('/viewfood',[AdminController::class,'viewfood']);
+route::get('/delfood/{id}',[AdminController::class,'delfood']);
+route::post('/add_cart/{id}',[HomeController::class,'add_cart']);
+route::get('/my_cart',[HomeController::class,'my_cart']);
+
+
 
 Route::middleware([
     'auth:sanctum',

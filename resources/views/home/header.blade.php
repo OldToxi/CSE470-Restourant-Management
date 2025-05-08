@@ -39,6 +39,7 @@
           @if (Route::has('login'))
 
           @auth
+          <li><a class="btn-getstarted" href="{{url('my_cart')}}"><b>Cart</b></a></li>
           <form action="{{route('logout')}}" method="post">
               @csrf
             <input class="btn-getstarted" type="submit" value="Logout">
