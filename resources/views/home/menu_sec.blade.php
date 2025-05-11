@@ -1,3 +1,10 @@
+<style>
+  .menu-img {
+  width: 100%;
+  height: 200px; /* adjust height as needed */
+  object-fit: cover;
+}
+</style>
 <section id="menu" class="menu section">
 
       <!-- Section Title -->

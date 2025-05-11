@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\food;
+use App\Models\Order;
 use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,7 +28,11 @@ class HomeController extends Controller
             }
             else
             {
-                return view('admin.index');
+                $total_user=User::where('usertype','=','user')->count();
+                $all_foods=food::count();
+                $total_orders=order::count();
+                $total_delivered=order::where('delivery_status','=','Delivered')->count();
+                return view('admin.index',compact('total_user','all_foods','total_orders','total_delivered'));
             }
         }
 
@@ -66,4 +71,38 @@ class HomeController extends Controller
         $data= Cart::where('userid','=',$user_id)->get();
         return view('home.my_cart',compact('data'));
     }
+    
+    public function remove_cart($id)
+    {
+        $data= Cart::find($id);
+        $data->delete();
+        return redirect()->back();
+    }
+    public function confirm_order(Request $request)
+    {
+        $user_id= Auth()->user()->id;
+        $cart= Cart::where('userid','=',$user_id)->get();
+        foreach($cart as $cart)
+        {
+            $order= new Order;
+            $order->name=$request->name;
+            $order->email=$request->email;
+            $order->address=$request->address;
+            $order->title=$cart->title;
+            $order->quantity=$cart->quantity;
+            $order->price=$cart->price;
+            $order->image=$cart->image;
+            $order->save();
+            $data=Cart::find($cart->id);
+            $data->delete();
+
+        }
+        return redirect()->back();
+    }
+    public function customer_orders()
+      {
+         $users = Auth::user();
+         $data=order::where('email',$users->email)->get();
+         return view('home.customer_orders',compact('data'));
+      }
 }
