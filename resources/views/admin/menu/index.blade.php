@@ -7,6 +7,7 @@
 @endsection
 
 @section('content')
+    <!-- Search box -->
     <div class="mb-4">
         <div class="input-group">
             <input type="text" id="searchInput" class="form-control" placeholder="Search menu items by name...">
@@ -15,10 +16,11 @@
             </div>
         </div>
     </div>
+
     <div class="mb-4">
         <h2>Starters</h2>
         @if($starters->count() > 0)
-            <table class="table">
+            <table class="table" id="starters-table">
                 <thead>
                     <tr>
                         <th>Image</th>
@@ -31,7 +33,7 @@
                 </thead>
                 <tbody>
                     @foreach($starters as $item)
-                        <tr>
+                        <tr class="menu-item">
                             <td>
                                 @if($item->image_path)
                                     <img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->name }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
@@ -39,7 +41,7 @@
                                     <div style="width: 60px; height: 60px; background-color: #f8f9fa; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #adb5bd;">No Image</div>
                                 @endif
                             </td>
-                            <td>{{ $item->name }}</td>
+                            <td class="item-name">{{ $item->name }}</td>
                             <td>{{ Str::limit($item->description, 50) }}</td>
                             <td>${{ number_format($item->price, 2) }}</td>
                             <td>
@@ -80,7 +82,7 @@
     <div class="mb-4">
         <h2>Mains</h2>
         @if($mains->count() > 0)
-            <table class="table">
+            <table class="table" id="mains-table">
                 <thead>
                     <tr>
                         <th>Image</th>
@@ -93,17 +95,17 @@
                 </thead>
                 <tbody>
                     @foreach($mains as $item)
-                        <tr>
-                            <td>
+                        <tr class="menu-item">
+                            <td >
                                 @if($item->image_path)
-                                    <img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->name }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
+                                    <img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->name }}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 4px;">
                                 @else
                                     <div style="width: 60px; height: 60px; background-color: #f8f9fa; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #adb5bd;">No Image</div>
                                 @endif
                             </td>
-                            <td>{{ $item->name }}</td>
+                            <td class="item-name">{{ $item->name }}</td>
                             <td>{{ Str::limit($item->description, 50) }}</td>
-                            <td>${{ number_format($item->price, 2) }}</td>
+                            <td>৳{{ number_format($item->price, 2) }}</td>
                             <td>
                                 @if($item->is_available)
                                     <span class="badge badge-success">Available</span>
@@ -142,7 +144,7 @@
     <div class="mb-4">
         <h2>Drinks</h2>
         @if($drinks->count() > 0)
-            <table class="table">
+            <table class="table" id="drinks-table">
                 <thead>
                     <tr>
                         <th>Image</th>
@@ -155,15 +157,15 @@
                 </thead>
                 <tbody>
                     @foreach($drinks as $item)
-                        <tr>
+                        <tr class="menu-item">
                             <td>
                                 @if($item->image_path)
-                                    <img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->name }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
+                                    <img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->name }}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 4px;">
                                 @else
                                     <div style="width: 60px; height: 60px; background-color: #f8f9fa; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #adb5bd;">No Image</div>
                                 @endif
                             </td>
-                            <td>{{ $item->name }}</td>
+                            <td class="item-name">{{ $item->name }}</td>
                             <td>{{ Str::limit($item->description, 50) }}</td>
                             <td>${{ number_format($item->price, 2) }}</td>
                             <td>
@@ -206,22 +208,20 @@
         });
 
         function searchMenuItems() {
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        
-  
-        const menuRows = document.querySelectorAll('tbody tr');
-        
-        menuRows.forEach(function(row) {
-   
-            const itemName = row.cells[1].textContent.toLowerCase();
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             
-            if (itemName.includes(searchTerm)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    }
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            menuItems.forEach(function(item) {
+                const itemName = item.querySelector('.item-name').textContent.toLowerCase();
+                
+                if (itemName.includes(searchTerm)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
 
         function clearSearch() {
             document.getElementById('searchInput').value = '';

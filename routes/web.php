@@ -32,8 +32,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::prefix('reservations')->name('reservations.')->group(function () {
         Route::get('/', [ReservationController::class, 'index'])->name('index');
-        
-      
         Route::get('/tables/create', [ReservationController::class, 'createTable'])->name('tables.create');
         Route::post('/tables', [ReservationController::class, 'storeTable'])->name('tables.store');
         Route::get('/tables/{id}/edit', [ReservationController::class, 'editTable'])->name('tables.edit');
